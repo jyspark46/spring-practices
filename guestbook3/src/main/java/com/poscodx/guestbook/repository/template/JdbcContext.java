@@ -10,6 +10,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 public class JdbcContext {
 	private DataSource dataSource;
@@ -59,7 +60,7 @@ public class JdbcContext {
 		ResultSet rs = null;
 		
 		try {
-			conn = dataSource.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			
 			pstmt = statementStrategy.makeStatement(conn);
 			rs = pstmt.executeQuery();
@@ -68,17 +69,17 @@ public class JdbcContext {
 				result.add(e);
 			}
 		} catch (SQLException e) {
-			System.out.println("Error:" + e);
+			// MyBatis에는 자동으로 되어있음 !!!
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				if(pstmt != null) {
 					pstmt.close();
 				}
 				if(conn != null) {
-					conn.close();
+					DataSourceUtils.releaseConnection(conn, dataSource);
 				}
-			} catch(SQLException e) {
-				System.out.println("Error:" + e);
+			} catch(SQLException ignored) {
 			}
 		}
 		
@@ -91,18 +92,19 @@ public class JdbcContext {
 		PreparedStatement pstmt = null;
 		
 		try {
-			conn = dataSource.getConnection();
+			conn = DataSourceUtils.getConnection(dataSource);
 			pstmt = statementStrategy.makeStatement(conn);
 			result = pstmt.executeUpdate();
 		} catch (SQLException e) {
-			System.out.println("Error:" + e);
+			// MyBatis에는 자동으로 되어있음 !!!
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				if(pstmt != null) {
 					pstmt.close();
 				}
 				if(conn != null) {
-					conn.close();
+					DataSourceUtils.releaseConnection(conn, dataSource);
 				}
 			} catch(SQLException e) {
 				System.out.println("Error:" + e);
