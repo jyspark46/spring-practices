@@ -108,13 +108,30 @@
 	</bean>
 	
 	<!-- 12. 빈 주입 -> 생성자 주입 1 -->
+	<bean id="dvdPlayer1" class="com.poscodx.container.videosystem.DVDPlayer">
+		<constructor-arg ref="ironMan" />
+	</bean>
 	
-	<!-- 13. 빈 주입 -> 생성자 주입 2 -->
+	<!-- 13. 빈 주입 -> 생성자 주입 2 - c-namespace의 argument name을 사용하는 방법, Spring 3.x 지원 -->
+	<bean
+		id="dvdPlayer2"
+		class="com.poscodx.container.videosystem.DVDPlayer" 
+		c:dvd-ref="ironMan" />
 	
-	<!-- 14. 빈 주입 -> 생성자 주입 3 -->
+	<!-- 14. 빈 주입 -> 생성자 주입 3 - c-namespace의 argument index를 사용하는 방법, Spring 3.x 지원 -->
+	<bean
+		id="dvdPlayer3"
+		class="com.poscodx.container.videosystem.DVDPlayer" 
+		c:_0-ref="ironMan" />
 	
 	<!-- 15. 빈 주입 -> Property 주입 1 -->
+	<bean id="dvdPlayer4" class="com.poscodx.container.videosystem.DVDPlayer">
+		<property name="dvd" ref="ironMan" />
+	</bean>
 	
-	<!-- 16. 빈 주입 -> Property 주입 2 -->
-	
+	<!-- 16. 빈 주입 -> Property 주입 2 - p-namespace 사용 -->
+	<bean
+		id="dvdPlayer5"
+		class="com.poscodx.container.videosystem.DVDPlayer"
+		p:dvd-ref="ironMan" />
 </beans>
